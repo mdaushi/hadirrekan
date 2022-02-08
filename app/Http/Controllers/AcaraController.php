@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Acara;
 use Illuminate\Http\Request;
 
 class AcaraController extends Controller
@@ -13,7 +14,8 @@ class AcaraController extends Controller
      */
     public function index()
     {
-        //
+        $acaras = Acara::all();
+        return view('pages.acara.index', compact('acaras'));
     }
 
     /**
@@ -23,7 +25,7 @@ class AcaraController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.acara.create');
     }
 
     /**
@@ -34,7 +36,13 @@ class AcaraController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $input = $request->all();
+        try {
+            Acara::create($input);
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Gagal menyimpan data.' . $th->getMessage());
+        }
+        return redirect()->route('acara.index')->with('success', 'Berhasil menyimpan data');
     }
 
     /**
