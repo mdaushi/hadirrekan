@@ -27,16 +27,17 @@
     <section class="section">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">Tambah Acara</h4>
+                <h4 class="card-title">Edit Acara</h4>
             </div>
             <div class="card-content">
                 <div class="card-body">
-                    <form class="form" action="{{ route('acara.store') }}" method="POST">
+                    <form class="form" action="{{ route('acara.update', $acara->id) }}" method="POST">
                         @csrf
+                        @method('put')
                         <div class="row">
                             @include('pages.acara.form')
                             <div class="col-12 d-flex justify-content-end">
-                                <button type="submit" class="btn btn-primary me-1 mb-1">Submit</button>
+                                <button type="submit" class="btn btn-primary me-1 mb-1">Update</button>
                                 <button type="reset" class="btn btn-light-secondary me-1 mb-1">Reset</button>
                             </div>
                         </div>
@@ -52,10 +53,13 @@
                 locale: {
                     format: 'DD/MM/YYYY'
                 }
+                
             }, function(start, end, label) {
                 console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end
                     .format('YYYY-MM-DD'));
             });
+
+            $('#tanggal').val('{{$acara->tanggal}}');
         </script>
     @endpush
 </x-app-layout>

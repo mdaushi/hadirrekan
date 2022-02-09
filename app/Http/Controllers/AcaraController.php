@@ -64,7 +64,8 @@ class AcaraController extends Controller
      */
     public function edit($id)
     {
-        //
+        $acara = Acara::findOrFail($id);
+        return view('pages.acara.edit', compact('acara'));
     }
 
     /**
@@ -76,7 +77,14 @@ class AcaraController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $input = $request->all();
+        $acara = Acara::findOrFail($id);
+        try {
+            $acara->update($input);
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Gagal menyimpan data.' . $th->getMessage());
+        }
+        return redirect()->route('acara.index')->with('success', 'Berhasil menyimpan data');
     }
 
     /**
@@ -87,6 +95,12 @@ class AcaraController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $acara = Acara::findOrFail($id);
+            $acara->delete();
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Gagal menghapus data.' . $th->getMessage());
+        }
+        return redirect()->route('acara.index')->with('success', 'Berhasil menghapus data');
     }
 }

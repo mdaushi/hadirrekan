@@ -7,17 +7,30 @@
             <table class="table table-striped" id="table1">
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>City</th>
-                        <th>Status</th>
+                        <th>No</th>
+                        <th>Acara</th>
+                        {{-- <th>Deskripsi</th> --}}
+                        <th>Tanggal</th>
+                        <th>Tempat</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($items as $item)
                     <tr>
+                        <td>{{ $loop->iteration }}</td>
                         <td>{{$item->name}}</td>
+                        {{-- <td>{{$item->description}}</td> --}}
+                        <td>{{$item->tanggal}}</td>
+                        <td>{{$item->tempat}}</td>
+                        <td class="d-flex">
+                            <a href="{{ route('acara.edit', $item->id) }}" class="btn btn-primary icon"><span class="bi bi-pencil-square"></span></a>
+                            <form action="{{ route('acara.destroy', $item->id) }}" method="POST">
+                                @csrf
+                                @method('delete')
+                                <button class="btn btn-danger icon"><span class="bi bi-trash-fill"></span></button>
+                            </form>
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>
