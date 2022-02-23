@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AcaraController;
+use App\Http\Controllers\PesertaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,5 +23,6 @@ Route::middleware('auth')->group(function(){
     Route::get('dashboard', function(){
         return view('pages.dashboard.index');
     })->name('dashboard');
-    Route::resource('acara', AcaraController::class);
+    Route::resource('acara', AcaraController::class)->except('show');
+    Route::resource('peserta', PesertaController::class);
 });
