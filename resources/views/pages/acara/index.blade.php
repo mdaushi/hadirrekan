@@ -22,5 +22,5 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     @endif
-    <x-datatable-component columns="dss" :items="$acaras"></x-datatable-component>
+    <x-datatable-component :items="$acaras"></x-datatable-component>
 </x-app-layout>

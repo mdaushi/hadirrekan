@@ -9,7 +9,7 @@
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item" aria-current="page">Acara</li>
-                        <li class="breadcrumb-item active" aria-current="page">tambah</li>
+                        <li class="breadcrumb-item active" aria-current="page">edit</li>
                     </ol>
                 </nav>
             </div>
