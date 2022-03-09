@@ -1,8 +1,9 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SesiController;
 use App\Http\Controllers\AcaraController;
 use App\Http\Controllers\PesertaController;
-use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,4 +26,5 @@ Route::middleware('auth')->group(function(){
     })->name('dashboard');
     Route::resource('acara', AcaraController::class)->except('show');
     Route::resource('peserta', PesertaController::class);
+    Route::resource('sesi', SesiController::class);
 });
