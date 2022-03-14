@@ -103,4 +103,10 @@ class AcaraController extends Controller
         }
         return redirect()->route('acara.index')->with('success', 'Berhasil menghapus data');
     }
+
+    public function get()
+    {
+        $acaras = Acara::all();
+        return response()->json($acaras);
+    }
 }

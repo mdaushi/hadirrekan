@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Acara;
-use App\Models\Sesi;
+use App\Models\Peserta;
+use App\Models\Presensi;
 use Illuminate\Http\Request;
 
-class SesiController extends Controller
+class PresensiController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +15,7 @@ class SesiController extends Controller
      */
     public function index()
     {
-        $sesis = Sesi::with('acara')->get();
-        return view('pages.sesi.index', compact('sesis'));
+        return view('pages.presensi.index');
     }
 
     /**
@@ -26,8 +25,7 @@ class SesiController extends Controller
      */
     public function create()
     {
-        $acaras = Acara::all();
-        return view('pages.sesi.create', compact('acaras'));
+        //
     }
 
     /**
@@ -39,12 +37,21 @@ class SesiController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
-        try {
-            Sesi::create($input);
-        } catch (\Throwable $th) {
-            return redirect()->back()->with('error', 'Gagal menyimpan data.' . $th->getMessage());
+        $pesertaExists = Peserta::where('acara_id', $input['acara_id'])->where('qrcode', $input['qr_code'].'.png')->first();
+        if(!$pesertaExists) {
+            return response()->json(['message' => 'Peserta tidak ditemukan', 'status' => false]);
         }
-        return redirect()->route('sesi.index')->with('success', 'Berhasil menyimpan data');
+        try {
+            $input['peserta_id'] = $pesertaExists->id;
+            Presensi::create([
+                'peserta_id' => $input['peserta_id'],
+                'sesi_id' => $input['sesi_id'],
+                'acara_id' => $input['acara_id']
+            ]);
+            return response()->json(['message' => $pesertaExists->name . ' Hadir', 'status' => true]);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'Ada kesalahan pada sistem'], 500);
+        }
     }
 
     /**
@@ -66,9 +73,7 @@ class SesiController extends Controller
      */
     public function edit($id)
     {
-        $sesi = Sesi::findOrFail($id);
-        $acaras = Acara::all();
-        return view('pages.sesi.edit', compact('sesi', 'acaras'));
+        //
     }
 
     /**
@@ -80,14 +85,7 @@ class SesiController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $input = $request->all();
-        $sesi = Sesi::findOrFail($id);
-        try {
-            $sesi->update($input);
-        } catch (\Throwable $th) {
-            return redirect()->back()->with('error', 'Gagal menyimpan data.' . $th->getMessage());
-        }
-        return redirect()->route('sesi.index')->with('success', 'Berhasil menyimpan data');
+        //
     }
 
     /**
@@ -98,18 +96,12 @@ class SesiController extends Controller
      */
     public function destroy($id)
     {
-        try {
-            $sesi = Sesi::findOrFail($id);
-            $sesi->delete();
-        } catch (\Throwable $th) {
-            return redirect()->back()->with('error', 'Gagal menghapus data.' . $th->getMessage());
-        }
-        return redirect()->route('sesi.index')->with('success', 'Berhasil menghapus data');
+        //
     }
 
-    public function get($id)
+    public function get($acara, $sesi)
     {
-        $sesis = Sesi::where('acara_id', $id)->get();
-        return response()->json($sesis);
+        $presensi = Presensi::with('peserta')->where('acara_id', $acara)->where('sesi_id', $sesi)->get();
+        return response()->json($presensi);
     }
 }
