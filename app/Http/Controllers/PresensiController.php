@@ -52,6 +52,7 @@ class PresensiController extends Controller
                 ]);
                 return response()->json(['message' => $pesertaExists->name . ' Hadir', 'status' => true]);
             }
+            return response()->json(['status' => 'exists']);
         } catch (\Throwable $th) {
             return response()->json(['message' => 'Ada kesalahan pada sistem'], 500);
         }

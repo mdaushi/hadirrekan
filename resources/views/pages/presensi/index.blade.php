@@ -143,7 +143,10 @@
                             qr_code: decodedText
                         })
                         .then(function (response) {
-                            if(response.data.status) {
+                            if(response.data.status == 'exists') {
+                                console.log('peserta sudah ada');
+                                return
+                            }else if(response.data.status) {
                                 Toastify({
                                     text: response.data.message,
                                     duration: 3000,
