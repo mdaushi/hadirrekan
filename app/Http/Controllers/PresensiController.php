@@ -43,12 +43,15 @@ class PresensiController extends Controller
         }
         try {
             $input['peserta_id'] = $pesertaExists->id;
-            Presensi::create([
-                'peserta_id' => $input['peserta_id'],
-                'sesi_id' => $input['sesi_id'],
-                'acara_id' => $input['acara_id']
-            ]);
-            return response()->json(['message' => $pesertaExists->name . ' Hadir', 'status' => true]);
+            $check = Presensi::where('peserta_id', $input['peserta_id'])->where('acara_id', $input['acara_id'])->where('sesi_id', $input['sesi_id'])->exists();
+            if(!$check){
+                Presensi::create([
+                    'peserta_id' => $input['peserta_id'],
+                    'sesi_id' => $input['sesi_id'],
+                    'acara_id' => $input['acara_id']
+                ]);
+                return response()->json(['message' => $pesertaExists->name . ' Hadir', 'status' => true]);
+            }
         } catch (\Throwable $th) {
             return response()->json(['message' => 'Ada kesalahan pada sistem'], 500);
         }
